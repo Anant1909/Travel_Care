@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "915767292819",
+    "project_id": "travel-care-hackatho",
+    "storage_bucket": "travel-care-hackatho.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915767292819:android:90e6b343a1c4aec16eee66",
+        "android_client_info": {
+          "package_name": "com.example.travel_care"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClSP9NZT1hsQRnhN03M12Mc9fKKbJ08j0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
