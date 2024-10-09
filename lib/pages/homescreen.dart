@@ -2,9 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:lottie/lottie.dart';
 import 'package:travel_care/constants/color.dart';
 import 'package:travel_care/pages/bottomnavigation.dart';
+import 'package:travel_care/pages/chatbot.dart';
 import 'package:travel_care/pages/first.dart';
 import 'package:travel_care/pages/flightstatus.dart';
 import 'package:travel_care/pages/history.dart';
@@ -26,6 +27,7 @@ class _HomescreenState extends State<Homescreen> with SingleTickerProviderStateM
   late AnimationController _controller;
   late Animation<Alignment> _topAlignmentAnimation;
   late Animation<Alignment> _bottomAlignmentAnimation;
+  late Animation<Offset> _slideAnimation;
   String userName = '';
   String userEmail = '';
   bool hasSpoken = false;
@@ -34,12 +36,15 @@ class _HomescreenState extends State<Homescreen> with SingleTickerProviderStateM
   void initState() {
     super.initState();
     _fetchUserData();
-    _checkFirstVisit();
     _controller = AnimationController(vsync: this,duration: const Duration(seconds: 4));
+      _slideAnimation = Tween<Offset>(
+      begin: const Offset(1.0, 0.0), // Start off-screen (to the right)
+      end: const Offset(0.0, 0.0), // Slide into view
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
     _topAlignmentAnimation = TweenSequence<Alignment>(
       [
         TweenSequenceItem<Alignment>(
-          tween: Tween<Alignment>(begin: Alignment.topLeft, end:Alignment.topRight), 
+          tween: Tween<Alignment>(begin: Alignment.topLeft, end:Alignment.topRight),
         weight: 1,
         ),
         TweenSequenceItem<Alignment>(
@@ -90,11 +95,6 @@ Future<void> _launchURL() async {
 }
 
 
-  Future<void> _checkFirstVisit() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool hasVisited = prefs.getBool('hasVisitedHomeScreen') ?? false;
-
-  }
 
   Future<void> _fetchUserData() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -162,51 +162,100 @@ Future<void> _launchURL() async {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Expanded(
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.all(16.0),
-                        padding: const EdgeInsets.all(16.0),
-                        decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 205, 226, 226),
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.zero,
-                            bottomRight: Radius.circular(40),
-                            topLeft: Radius.circular(40),
-                            topRight: Radius.zero,
-                          ),
-                        ),
-                        child: Text(
-                          "Welcome, $userName! Fasten your seatbelt for an amazing journey with our AI-powered app. Whether it's about flight status, finding hotels, creating itineraries, or translating languages, we've got you covered. Enjoy your flight and let AI guide your way!",
-                          style: const TextStyle(
-                              fontFamily: 'OpenSans',
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              fontStyle: FontStyle.italic),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Expanded(
-                        child: CarouselSlider(
-                          items: <Widget>[
-                            _buildCard('Flight Status', 'assets/images/logo2.jpeg'),
-                            _buildCard('Itinerary Generator', 'assets/images/i.jpg'),
-                            _buildCard('Language Translator', 'assets/images/l.jpg'),
-                            _buildCard('Stays', 'assets/images/h.jpg'),
-                          ],
-                          options: CarouselOptions(
-                            height: 400,
-                            enlargeCenterPage: true,
-                            enableInfiniteScroll: true,
-                            autoPlay: true,
-                          ),
-                        ),
-                      ),
-                    ],
+              Expanded(
+  child: Column(
+    children: <Widget>[
+      Container(
+        margin: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
+        decoration: const BoxDecoration(
+          color: Color.fromARGB(255, 205, 226, 226),
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.zero,
+            bottomRight: Radius.circular(40),
+            topLeft: Radius.circular(40),
+            topRight: Radius.zero,
+          ),
+        ),
+        child: Text(
+          "Welcome, $userName! Fasten your seatbelt for an amazing journey with our AI-powered app. Whether it's about flight status, finding hotels, creating itineraries, or translating languages, we've got you covered. Enjoy your flight and let AI guide your way!",
+          style: const TextStyle(
+            fontFamily: 'OpenSans',
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            fontStyle: FontStyle.italic,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+      Expanded(
+        child: CarouselSlider(
+          items: <Widget>[
+            _buildCard('Flight Status', 'assets/images/logo2.jpeg'),
+            _buildCard('Itinerary Generator', 'assets/images/i.jpg'),
+            _buildCard('Language Translator', 'assets/images/l.jpg'),
+            _buildCard('Stays', 'assets/images/h.jpg'),
+          ],
+          options: CarouselOptions(
+            height: 300, // Reduced the height of the cards
+            enlargeCenterPage: true,
+            enableInfiniteScroll: true,
+            autoPlay: true,
+          ),
+        ),
+      ),
+      const SizedBox(height: 20),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GestureDetector(
+          onTap: (){
+              Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const Chatbot(),
+                  ),
+                );
+          }  ,
+          child: Row(
+            children: [
+              Lottie.asset(
+              'assets/animation/hello.json',
+              height: 80,
+              width: 80,
+            ),
+              SlideTransition(
+                position: _slideAnimation,
+                child: Container(
+                  padding: const EdgeInsets.all(16.0),
+          decoration: const BoxDecoration(
+            color: Color.fromARGB(255, 205, 226, 226),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.zero,
+              bottomRight: Radius.circular(40),
+              topLeft: Radius.circular(40),
+              topRight: Radius.zero,
+            ),
+          ),
+                  child: const Text(
+                    "Stuck somewhere? AI will help!",
+                      style: const TextStyle(
+              fontFamily: 'OpenSans',
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic,
+            ),
                   ),
                 ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ],
+  ),
+),
+
               ],
             ),
           );

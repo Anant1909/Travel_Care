@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
@@ -375,6 +376,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> with SingleTickerProv
                                     style: const TextStyle(
                                       fontFamily: 'Nato Sans',
                                       fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 16, 0, 109)
                                     ),
                                   ),
                                 ),

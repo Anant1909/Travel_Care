@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_care/firebase_options.dart';
-import 'package:travel_care/pages/splash_screen.dart';
+import 'package:travel_care/pages/homescreen.dart';
 import 'package:travel_care/provider.dart';
 
 void main() async {
@@ -12,7 +12,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await FirebaseAppCheck.instance.activate(
-// For Android
+
   );
 
   runApp(
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       
       debugShowCheckedModeBanner: false,
       title: 'Travel Care',
-      home: Splash(),
+      home: Homescreen(),
     );
   }
 }

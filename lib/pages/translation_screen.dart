@@ -407,7 +407,7 @@ class _TranslationScreenState extends State<TranslationScreen> with SingleTicker
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
+                                  color: Color.fromARGB(255, 16, 0, 109),
                                 ),
                               ),
                             ),

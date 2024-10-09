@@ -69,7 +69,7 @@ class _Onboarding1State extends State<Onboarding1> {
                         ),
                       ),
                       child: const Text(
-                        'What’s your primary goal for using our travel app?',
+                        "What’s your primary goal for using our travel app?",
                         style: TextStyle(
                           fontFamily: 'OpenSans',
                           color: Colors.black,

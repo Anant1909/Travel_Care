@@ -1,3 +1,5 @@
+// ignore_for_file: body_might_complete_normally_catch_error
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -31,7 +33,7 @@ class _FlightStatusState extends State<FlightStatus> with SingleTickerProviderSt
   bool _removeReturnDateBorder = false;
   bool _hasGenerated = false;
   bool _isLoading = false;
-
+  bool _isReturnDateValid = true;
 @override
   void initState() {
     super.initState();
@@ -100,13 +102,19 @@ class _FlightStatusState extends State<FlightStatus> with SingleTickerProviderSt
           _departureDateController.text = formattedDate;
         } else if (controller == _returnDateController) {
           DateTime? departureDate = DateFormat('dd-MM-yyyy').parseStrict(_departureDateController.text, true);
-  
+          if (departureDate != null && pickedDate.isBefore(departureDate)) {
+            _isReturnDateValid = false;
+            _showErrorDialog('Return date must be after departure date.');
+          } else {
+            _isReturnDateValid = true;
             _returnDateController.text = formattedDate;
           }
-        
+        }
       });
 
-      
+      if (controller == _departureDateController || (_isReturnDateValid && controller == _returnDateController)) {
+        await _saveData();
+      }
     }
   }
 
@@ -212,6 +220,7 @@ class _FlightStatusState extends State<FlightStatus> with SingleTickerProviderSt
   void _removeReturnDate() {
     setState(() {
       _returnDateController.clear();
+      _isReturnDateValid = true;
       _flightDetails.removeWhere((flight) => flight['type'] == 'return');
     });
   }
@@ -405,7 +414,7 @@ Widget build(BuildContext context) {
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   labelText: 'Return Date',
-          
+                                  errorText: !_isReturnDateValid ? 'Return date must be after departure date' : null,
                                 ),
                                 maxLines: 1,
                               ),
@@ -439,7 +448,10 @@ Widget build(BuildContext context) {
                       return;
                     }
                         
-                    
+                    if (!_isReturnDateValid) {
+                      _showErrorDialog('Please enter a valid return date.');
+                      return;
+                    }
                         
                     setState(() {
                       _isLoading = true;
