@@ -40,36 +40,25 @@ dependencies:
   cloud_firestore: ^5.2.1
   http: ^1.2.2
   provider: ^6.1.2
-  flutter_local_notifications: ^17.2.2
-  google_ml_kit: ^0.18.0
   google_generative_ai: ^0.4.5
   flutter_dotenv: ^5.1.0 
-  google_maps_flutter: ^2.9.0
-  google_places_flutter: ^2.0.9
   carousel_slider: ^5.0.0
   lottie: ^3.1.2
   intl: ^0.19.0
   crypto: ^3.0.5
   dropdown_search: ^5.0.6
-  shared_preferences: ^2.3.2
   url_launcher: ^6.3.0
   fluttertoast: ^8.2.8
-  csv: ^6.0.0
   firebase_storage: ^12.3.0
-  path_provider: ^2.1.4
   file_picker: ^8.1.2
   firebase_app_check: ^0.3.1+2
+  flutter_markdown: ^0.7.3+2
 
   
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.14.0
 
-flutter_launcher_icons:
-  android: true
-  ios: true
-  image_path: "assets/icon/icon.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -93,7 +82,7 @@ flutter:
   assets:
     - assets/images/
     - assets/animation/
-    - assets/animation/hello.json
+    - assets/icon.png
 
 
 

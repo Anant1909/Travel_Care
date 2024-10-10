@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_care/constants/color.dart';
 import 'package:travel_care/pages/homescreen.dart';
@@ -116,9 +117,13 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return const Center(child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ));
+                      return Center(
+                        child: Lottie.asset(
+                                      'assets/animation/loading1.json',
+                                      height: 80,
+                                      width: 80,
+                                    ),
+                      );
                     }
           
                     final itineraries = snapshot.data!.docs;

@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:travel_care/constants/color.dart';
 import 'package:travel_care/pages/gradient_button.dart';
 import 'package:travel_care/pages/homescreen.dart';
@@ -41,7 +43,7 @@ class ItineraryService {
         );
 
   Future<String?> generateAndStoreItinerary(String location, String startDate, String endDate) async {
-    final prompt = 'Generate a travel itinerary for $location from $startDate to $endDate.';
+    final prompt = "Generate a travel itinerary for $location from $startDate to $endDate.";
 
     final response = await _model.generateContent(
       [Content.text(prompt)],
@@ -347,8 +349,12 @@ class _ItineraryScreenState extends State<ItineraryScreen> with SingleTickerProv
                 ),
                 const SizedBox(height: 20),
                 if (_isLoading) ...[
-                  const Center(
-                    child: CircularProgressIndicator(color: Colors.white),
+                  Center(
+                    child: Lottie.asset(
+                                  'assets/animation/loading1.json',
+                                  height: 80,
+                                  width: 80,
+                                ),
                   ),
                 ] else ...[
                   Expanded(
@@ -359,28 +365,45 @@ class _ItineraryScreenState extends State<ItineraryScreen> with SingleTickerProv
                           children: [
                             if (_hasGenerated) ...[
                               Container(
-                                decoration: BoxDecoration(
-                                  color: const Color.fromARGB(255, 247, 240, 229),
-                                  border: Border.all(),
-                                  borderRadius: const BorderRadius.only(
-                                    bottomLeft: Radius.zero,
-                                    bottomRight: Radius.circular(20),
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.zero,
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Text(
-                                    _itinerary,
-                                    style: const TextStyle(
-                                      fontFamily: 'Nato Sans',
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 16, 0, 109)
-                                    ),
-                                  ),
-                                ),
-                              ),
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 247, 240, 229),
+            border: Border.all(),
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.zero,
+              bottomRight: Radius.circular(20),
+              topLeft: Radius.circular(20),
+              topRight: Radius.zero,
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: MarkdownBody(
+              data: _itinerary,
+              styleSheet: MarkdownStyleSheet(
+                h2: const TextStyle(
+                  fontFamily: 'Nato Sans',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                  color: Color.fromARGB(255, 16, 0, 109),
+                ),
+                p: const TextStyle(
+                  fontFamily: 'Nato Sans',
+                  fontSize: 16,
+                  color: Color.fromARGB(255, 16, 0, 109),
+                ),
+                strong: const TextStyle(
+                  fontFamily: 'Nato Sans',
+                  fontWeight: FontWeight.bold,
+                ),
+                listBullet: const TextStyle(
+                  fontFamily: 'Nato Sans',
+                  fontSize: 16,
+                  color: Color.fromARGB(255, 16, 0, 109),
+                ),
+              ),
+            ),
+          ),
+        ),
                               const SizedBox(height: 20),
                               for (String imageUrl in _images) Image.network(imageUrl),
                             ],

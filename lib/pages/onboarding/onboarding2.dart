@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:travel_care/constants/color.dart';
 import 'package:travel_care/pages/gradient_button.dart';
 import 'package:travel_care/pages/onboarding/onboarding3.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+// Get the user ID from Firebase Authentication
+String? userId = FirebaseAuth.instance.currentUser?.uid; // Ensure the user is logged in
 
 final pallatte = Pallatte();
 class Onboarding2 extends StatefulWidget {
@@ -102,7 +106,7 @@ class _Onboarding2State extends State<Onboarding2> {
                 child: GradientButton(
                   buttonText: 'Next',
                   onPressed: () {
-                    _saveResponsesToFirestore(); // Call the function to save responses
+                    _saveResponsesToFirestore('Onboarding2'); // Call the function to save responses
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const Onboarding3(),
                     ));
@@ -153,19 +157,24 @@ class _Onboarding2State extends State<Onboarding2> {
   }
 
   // Function to save responses to Firestore
-  Future<void> _saveResponsesToFirestore() async {
-    // Create a reference to the Firestore collection
-    CollectionReference responses = _firestore.collection('user_responses');
-
-    // Save the selected options
-    try {
-      await responses.add({
-        'selected_options': _selectedOptions.toList(),
-        'timestamp': FieldValue.serverTimestamp(),
-      });
-      print("Responses saved successfully");
-    } catch (e) {
-      print("Error saving responses: $e");
-    }
+ Future<void> _saveResponsesToFirestore(String screenName) async {
+  if (userId == null) {
+    print("User is not authenticated");
+    return;
   }
+
+  // Create a reference to the Firestore collection and document based on user ID
+  DocumentReference userDoc = _firestore.collection('user_responses').doc(userId);
+
+  // Save or update the selected options for a particular screen
+  try {
+    await userDoc.set({
+      screenName: _selectedOptions.toList(), // Save the current screen's options
+      'timestamp': FieldValue.serverTimestamp(), // Optionally, store the timestamp
+    }, SetOptions(merge: true)); // Merge with existing data to avoid overwriting other screen responses
+    print("Responses saved successfully");
+  } catch (e) {
+    print("Error saving responses: $e");
+  }
+}
 }

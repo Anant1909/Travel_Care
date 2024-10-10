@@ -9,14 +9,14 @@ android {
     namespace = "com.example.travel_care"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
-    splits {
-        abi {
-        enable true
-            reset()
-            include 'armeabi-v7a', 'arm64-v8a', 'x86_64'
-            universalApk false  // If true, it will also generate a universal APK
-        }
-    }
+    // splits {
+    //     abi {
+    //     enable true
+    //         reset()
+    //         include 'armeabi-v7a', 'arm64-v8a', 'x86_64'
+    //         universalApk false  // If true, it will also generate a universal APK
+    //     }
+    // }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -37,9 +37,9 @@ android {
     buildTypes {
         release {
             signingConfig = signingConfigs.debug
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // minifyEnabled true
+            // shrinkResources true
+            // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }

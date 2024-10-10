@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:travel_care/constants/color.dart';
 import 'package:travel_care/pages/gradient_button.dart';
 import 'package:travel_care/pages/homescreen.dart';
@@ -25,11 +26,42 @@ class _HotelScreenState extends State<HotelScreen> with SingleTickerProviderStat
   bool _isLoading = false;
   bool _hasGenerated = false;
   List<Map<String, dynamic>> _hotelDetails = [];
+  // Map<String, dynamic> userPreferences = {}; // Store user preferences here
+
+  
+
+  // Future<void> _fetchUserPreferences() async {
+  //   // Fetch user responses from Firestore or other local storage
+  //   DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('user_responses').doc(userId).get();
+  //   setState(() {
+  //     userPreferences = snapshot.data() as Map<String, dynamic>;
+  //   });
+  // }
+
+  // void _fetchHotelData() async {
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+
+  //   try {
+  //     final hotelService = HotelService('your_api_key_here');
+  //     _hotelDetails = await hotelService.generateHotelsBasedOnPreferences(userPreferences);
+  //     _isLoading = false;
+  //     _hasGenerated = true;
+  //   } catch (e) {
+  //     _showErrorDialog('Failed to fetch hotel data: ${e.toString()}');
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //   }
+  // }
+
 
   @override
   void initState() {
+      // _fetchUserPreferences();
     super.initState();
-       _controller = AnimationController(vsync: this,duration: const Duration(seconds: 6));
+      _controller = AnimationController(vsync: this,duration: const Duration(seconds: 6));
     _topAlignmentAnimation = TweenSequence<Alignment>(
       [
         TweenSequenceItem<Alignment>(
@@ -306,7 +338,13 @@ class _HotelScreenState extends State<HotelScreen> with SingleTickerProviderStat
                 ),
                 const SizedBox(height: 20),
                 _isLoading
-                    ? const CircularProgressIndicator()
+                    ? Center(
+                      child: Lottie.asset(
+                                    'assets/animation/loading1.json',
+                                    height: 80,
+                                    width: 80,
+                                  ),
+                    )
                     : _hasGenerated
                         ? Expanded(
                             child: ListView.builder(
@@ -424,4 +462,39 @@ class _HotelScreenState extends State<HotelScreen> with SingleTickerProviderStat
       ),
     );
   }
+  
 }
+// class HotelService {
+//   final GenerativeModel _model;
+
+//   HotelService(String apiKey)
+//       : _model = GenerativeModel(
+//           model: 'gemini-1.5-flash',
+//           apiKey: apiKey,
+//         );
+
+//   Future<List<Map<String, dynamic>>> generateHotelsBasedOnPreferences(Map<String, dynamic> userPreferences) async {
+//     String preferencesDescription = userPreferences.entries.map((e) => '${e.key}: ${e.value}').join(', ');
+
+//     final prompt = "Generate hotel data based on the following user preferences: $preferencesDescription. Provide a list of hotels with names, ratings, types, facilities, and contact numbers.";
+
+//     final response = await _model.generateContent([Content.text(prompt)]);
+
+//     if (response.error != null) {
+//       throw Exception('Failed to generate hotel data: ${response.error!.message}');
+//     }
+
+//     final hotelData = response.text; // Expecting a JSON formatted response
+//     print("Raw hotel data response: $hotelData"); // Debugging line
+//     return parseHotelData(hotelData);
+//   }
+
+//   List<Map<String, dynamic>> parseHotelData(String hotelData) {
+//     try {
+//       // Parse the generated hotel data (JSON string) into a List<Map<String, dynamic>>
+//       return List<Map<String, dynamic>>.from(jsonDecode(hotelData));
+//     } catch (e) {
+//       throw Exception('Failed to parse hotel data: $e');
+//     }
+//   }
+// }

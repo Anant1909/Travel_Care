@@ -49,7 +49,7 @@ class _HomescreenState extends State<Homescreen> with SingleTickerProviderStateM
         ),
         TweenSequenceItem<Alignment>(
           tween: Tween<Alignment>(begin: Alignment.topRight, end:Alignment.bottomRight), 
-        weight: 1,
+        weight: 1,    
         ),
         TweenSequenceItem<Alignment>(
           tween: Tween<Alignment>(begin: Alignment.bottomRight, end:Alignment.bottomLeft), 
@@ -178,7 +178,7 @@ Future<void> _launchURL() async {
           ),
         ),
         child: Text(
-          "Welcome, $userName! Fasten your seatbelt for an amazing journey with our AI-powered app. Whether it's about flight status, finding hotels, creating itineraries, or translating languages, we've got you covered. Enjoy your flight and let AI guide your way!",
+          "Welcome, $userName! If you're facing travel issues like flight delays, last-minute changes, or searching for nearby healthcare centers, our AI is here to assist. From finding alternative routes to providing timely suggestions, we’ve got you covered. Let us handle the challenges, so you can travel with peace of mind.",
           style: const TextStyle(
             fontFamily: 'OpenSans',
             color: Colors.black,
@@ -198,14 +198,14 @@ Future<void> _launchURL() async {
             _buildCard('Stays', 'assets/images/h.jpg'),
           ],
           options: CarouselOptions(
-            height: 300, // Reduced the height of the cards
+            height: 350,
             enlargeCenterPage: true,
             enableInfiniteScroll: true,
             autoPlay: true,
           ),
         ),
       ),
-      const SizedBox(height: 20),
+      const SizedBox(height: 0),
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: GestureDetector(
@@ -237,7 +237,7 @@ Future<void> _launchURL() async {
             ),
           ),
                   child: const Text(
-                    "Stuck somewhere? AI will help!",
+                    "Stuck somewhere? Ask me",
                       style: const TextStyle(
               fontFamily: 'OpenSans',
               color: Colors.black,
