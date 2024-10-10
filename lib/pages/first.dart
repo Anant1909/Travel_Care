@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:travel_care/constants/color.dart';
 import 'package:travel_care/pages/gradient_button.dart';
 import 'package:travel_care/pages/onboarding/onboarding1.dart';
@@ -74,10 +75,10 @@ class _FirstState extends State<First> {
       } on FirebaseAuthException catch (e) {
         // If sign-in fails, show error message
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+         const SnackBar(
             content: Text(
               'This email is already in use, and the password is incorrect.',
-              style: const TextStyle(color: Colors.black),
+              style:  TextStyle(color: Colors.black),
             ),
             backgroundColor: Colors.white,
           ),
@@ -188,10 +189,17 @@ class _FirstState extends State<First> {
                   ),
                 ),
                 const SizedBox(height: 15),
-                GradientButton(
-                  buttonText: 'Launch Adventure',
-                  onPressed: _signUp,
-                ),
+                // Display CircularProgressIndicator instead of the button if _isLogging is true
+                _isLogging
+                    ? Lottie.asset(
+                                  'assets/animation/loading1.json',
+                                  height: 80,
+                                  width: 80,
+                                )
+                    : GradientButton(
+                        buttonText: 'Launch Adventure',
+                        onPressed: _signUp,
+                      ),
                 const SizedBox(height: 15),
                 // GestureDetector(
                 //   onTap: () {
